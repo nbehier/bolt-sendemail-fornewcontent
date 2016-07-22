@@ -1,12 +1,12 @@
 <?php
 
-namespace Bolt\Extension\Leskis\BoltFieldGeojson\Tests;
+namespace Bolt\Extension\Leskis\BoltSendEmailForNewContent\Tests;
 
 use Bolt\Tests\BoltUnitTest;
-use Bolt\Extension\Leskis\BoltFieldGeojson\BoltFieldGeojsonExtension;
+use Bolt\Extension\Leskis\BoltSendEmailForNewContent\BoltSendEmailForNewContentExtension;
 
 /**
- * BoltFieldGeojson testing class.
+ * BoltSendEmailForNewContent testing class.
  *
  * @author Nicolas Béhier-Dévigne
  */
