@@ -1,0 +1,32 @@
+debug:
+    enabled: true
+    address: noreply@example.com # email used to send debug notifications
+
+subscribers:
+    contenttype: subscribers # content type with the subscribers data
+    emailfield: email        # email field name
+
+# templates:
+#     emailbody: extensions/bolt-sendemail_fornewcontent/email.twig
+#     emailsubject: extensions/bolt-sendemail_fornewcontent/_subject.twig
+
+notifications:
+    entries:               # contenttype
+#         enabled: true
+#         event: new-pusblished
+#         subscribers:
+#             contenttype: subscribers
+#             emailfield: email
+#             filter:
+#                 field: newcontentsubscription
+#                 value: true
+#         debug:   true
+#         email:
+#             subject: New entry published
+#             from_name:      # Default : Site name
+#             from_email:     # 
+#             replyto_name:   #
+#             replyto_email:  #
+#         templates:          # Over ride the global Twig templates for this form
+#             emailbody: extensions/bolt-sendemail_fornewcontent/email.twig
+#             emailsubject: extensions/bolt-sendemail_fornewcontent/_subject.twig
