@@ -55,3 +55,9 @@ notifications:
 #             emailbody: extensions/bolt-sendemail_fornewcontent/email.twig
 #             emailsubject: extensions/bolt-sendemail_fornewcontent/_subject.twig
 ```
+
+### Credits
+Globally inspired by [BoltForms](https://github.com/bolt/boltforms)
+
+### License
+This Bolt extension is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
