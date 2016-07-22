@@ -11,6 +11,9 @@ use Bolt\Extension\SimpleExtension;
  */
 class BoltSendEmailForNewContentExtension extends SimpleExtension
 {
+    /**
+     * {@inheritdoc}
+     */
     protected function getDefaultConfig()
     {
         return [
@@ -56,5 +59,13 @@ class BoltSendEmailForNewContentExtension extends SimpleExtension
                 ],
             ]
         ];
+    }
+    
+    /**
+     * {@inheritdoc}
+     */
+    public function getDisplayName()
+    {
+        return 'Send email for new content';
     }
 }
