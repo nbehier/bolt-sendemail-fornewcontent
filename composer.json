@@ -1,0 +1,44 @@
+{
+    "name": "leskis/bolt-sendemail-fornewcontent",
+    "description": "Bolt extension to send email when new content is published",
+    "type": "bolt-extension",
+    "keywords": [
+        "email",
+        "event",
+        "notification"
+    ],
+    "require": {
+        "bolt/bolt": "^3.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^4.7"
+    },
+    "suggest": {
+        "miguelavaqrod/newsletter": "An extension to save newsletter email subscriptions."
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Nicolas Béhier-Dévigne",
+            "homepage": "http://www.leskis.net",
+            "role": "Developer"
+        }
+    ],
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "autoload": {
+        "psr-4": {
+            "Bolt\\Extension\\Leskis\\BoltSendEmailForNewContent\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Bolt\\Extension\\Leskis\\BoltSendEmailForNewContent\\Tests\\": "tests",
+            "Bolt\\Tests\\": "vendor/bolt/bolt/tests/phpunit/unit/"
+        }
+    },
+    "extra": {
+        "bolt-class": "Bolt\\Extension\\Leskis\\BoltSendEmailForNewContent\\BoltSendEmailForNewContentExtension",
+        "bolt-icon": "extra/bolt-sendemail-fornewcontent-logo.png"
+    }
+}
