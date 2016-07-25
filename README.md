@@ -20,6 +20,8 @@ Email notifications will be sent, you should configure the `mailoptions` setting
 
 **Note:** This extension uses the Swiftmailer library to send email notifications, based on the `mailoptions:` setting in your Bolt `app/config/config.yml` file.
 
+**Tip:** If you want to modify the HTML templates, you should copy the `.yml` file to your `theme/` folder, and modify it there. Any changes in the file in the distribution might be overwritten after an update to the extension. For instance, if you copy `email.twig` to `theme/base-2016/my_email.twig`, the corresponding line in `config.yml` should be: `emailbody: my_email.twig`
+
 ### Extension Configuration
 ```(yml)
 debug:
