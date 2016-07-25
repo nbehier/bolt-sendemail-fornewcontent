@@ -38,15 +38,12 @@ class BoltSendEmailForNewContentExtension extends SimpleExtension
             return;
         }
     
-        // If this is not a create event, leave
-        if ($event->isCreate()) {
-            // Get the newly saved record
-            $record = $event->getContent();
+        // Get the newly saved record
+        $record = $event->getContent();
     
-            // Launch the notification
-            $notify = new Notifications($this->app, $record);
-            $notify->doNotification();
-        }
+        // Launch the notification
+        $notify = new Notifications($this->app, $record);
+        $notify->doNotification();
     }
     
     /**
