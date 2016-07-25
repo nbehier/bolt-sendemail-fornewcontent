@@ -2,7 +2,11 @@
 
 namespace Bolt\Extension\Leskis\BoltSendEmailForNewContent;
 
+use Bolt\Events\StorageEvent;
+use Bolt\Events\StorageEvents;
 use Bolt\Extension\SimpleExtension;
+use Bolt\Translation\Translator as Trans;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * BoltSendEmailForNewContent extension class.
@@ -11,6 +15,59 @@ use Bolt\Extension\SimpleExtension;
  */
 class BoltSendEmailForNewContentExtension extends SimpleExtension
 {
+    /**
+     * {@inheritdoc}
+     */
+    protected function subscribe(EventDispatcherInterface $dispatcher)
+    {
+        // Post-save hook for topic and reply creations
+        $dispatcher->addListener(StorageEvents::POST_SAVE, [$this, 'hookPostSave']);
+    }
+    
+    /**
+     * Post-save hook for topic and reply creations
+     *
+     * @param \Bolt\Events\StorageEvent $event
+     */
+    public function hookPostSave(StorageEvent $event)
+    {
+        // Get contenttype
+        $contenttype = $event->getContentType();
+        $aNotificationsContentTypes = $this->getNotifContentTypes();
+        if (empty($contenttype) || empty($aNotificationsContentTypes) || !in_array($contenttype, $aNotificationsContentTypes) ) {
+            return;
+        }
+    
+        // If this is not a create event, leave
+        if ($event->isCreate()) {
+            // Get the newly saved record
+            $record = $event->getContent();
+    
+            // Launch the notification
+            $notify = new Notifications($this->app, $record);
+            $notify->doNotification();
+        }
+    }
+    
+    /**
+     * Get ContentTypes which have subscriptions
+     * @todo
+     */
+    private function getNotifContentTypes()
+    {
+        $config = $this->getConfig();
+    }
+    
+    /**
+     * {@inheritdoc}
+     */
+    protected function registerTwigPaths()
+    {
+        return [
+            'templates'
+        ];
+    }
+
     /**
      * {@inheritdoc}
      */
