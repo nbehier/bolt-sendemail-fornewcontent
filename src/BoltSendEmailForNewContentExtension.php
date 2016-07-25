@@ -21,7 +21,7 @@ class BoltSendEmailForNewContentExtension extends SimpleExtension
     protected function subscribe(EventDispatcherInterface $dispatcher)
     {
         // Post-save hook for topic and reply creations
-        $dispatcher->addListener(StorageEvents::POST_SAVE, [$this, 'hookPostSave']);
+        $dispatcher->addListener(StorageEvents::PRE_SAVE, [$this, 'hookPreSave']);
     }
     
     /**
@@ -29,7 +29,7 @@ class BoltSendEmailForNewContentExtension extends SimpleExtension
      *
      * @param \Bolt\Events\StorageEvent $event
      */
-    public function hookPostSave(StorageEvent $event)
+    public function hookPreSave(StorageEvent $event)
     {
         // Get contenttype
         $contenttype = $event->getContentType();
@@ -38,21 +38,35 @@ class BoltSendEmailForNewContentExtension extends SimpleExtension
             return;
         }
     
-        // Get the newly saved record
+        // Get the record
         $record = $event->getContent();
-    
-        // Launch the notification
-        $notify = new Notifications($this->app, $record);
-        $notify->doNotification();
+        
+        // Test if newly published
+        // @todo create and published
+        if (false) {
+            // Launch the notification
+            $notify = new Notifications($this->app, $record);
+            
+            // Search subscribers
+            // @todo
+            
+            // Send email foreach subscriber
+            // @todo
+            $notify->doNotification();
+        }
+        else {
+            // @todo : check if notification already sent
+            // use a temporary file or a db table ?
+        }
     }
     
     /**
      * Get ContentTypes which have subscriptions
-     * @todo
      */
     private function getNotifContentTypes()
     {
         $config = $this->getConfig();
+        // @todo
     }
     
     /**
