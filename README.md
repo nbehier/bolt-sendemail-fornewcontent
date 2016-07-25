@@ -59,7 +59,7 @@ notifications:
 ```
 
 ### Credits
-Globally inspired by [BoltForms](https://github.com/bolt/boltforms)
+Globally inspired by [BoltForms](https://github.com/bolt/boltforms) and [BoltBB](https://github.com/GawainLynch/bolt-extension-boltbb)
 
 ### License
 This Bolt extension is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
