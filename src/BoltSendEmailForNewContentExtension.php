@@ -114,7 +114,14 @@ class BoltSendEmailForNewContentExtension extends SimpleExtension
     {
         $config        = $this->getConfig();
         $aContentTypes = array_keys($config['notifications']);
-        return $aNotificationsContentTypes;
+
+        foreach ($aContentTypes as $k => $sContentType) {
+            if (array_key_exists('enabled', $config['notifications'][$sContentType]) && $config['notifications'][$sContentType]['enabled'] == false) {
+                unset($aContentTypes[$k]);
+            }
+        }
+
+        return $aContentTypes;
     }
 
     /**
