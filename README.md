@@ -36,6 +36,13 @@ subscribers:
 #     emailbody: extensions/bolt-sendemail_fornewcontent/email.twig
 #     emailsubject: extensions/bolt-sendemail_fornewcontent/_subject.twig
 
+# email:
+#     subject: New entry published
+#     from_name:      # Default : Site name
+#     from_email:     # 
+#     replyto_name:   #
+#     replyto_email:  #
+
 notifications:
     entries:               # contenttype
 #         enabled: true
