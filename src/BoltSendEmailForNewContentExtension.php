@@ -69,10 +69,9 @@ class BoltSendEmailForNewContentExtension extends SimpleExtension
                 $aSubscribers = $this->getSubscribers($contenttype);
 
                 // Send email foreach subscriber
-                // @todo
-                //$notify->doNotification();
+                $notify->doNotification($aSubscribers);
             } catch (\Exception $e) {
-                //$this->app['logger.system']->info("Notifications to {$recipient['displayName']} <{$recipient['email']}>", ['event' => 'extensions']);
+                $this->app['logger.system']->error(sprintf("Notifications can't be sent - %s", $e->getMessage() ), ['event' => 'extensions']);
                 return;
             }
         }
@@ -85,7 +84,7 @@ class BoltSendEmailForNewContentExtension extends SimpleExtension
      * @throws Exception
      * @return array records
      */
-    private function getSubscribers(String $contenttype)
+    private function getSubscribers($contenttype)
     {
         $config       = $this->getConfig();
         $subConfig    = $config['subscribers'];
@@ -178,6 +177,14 @@ class BoltSendEmailForNewContentExtension extends SimpleExtension
             'templates' => [
                 'emailbody'    => '@BoltSendEmailForNewContent/email.twig',
                 'emailsubject' => '@BoltSendEmailForNewContent/_subject.twig'
+            ],
+
+            'email' => [
+                'subject'       => 'New entry published',
+                'from_name'     => '',
+                'from_email'    => '',
+                'replyto_name'  => '',
+                'replyto_email' => ''
             ],
 
             'notifications' => [
