@@ -77,7 +77,7 @@ class Notifications
     /**
      *
      */
-    public function doNotification()
+    public function doNotification($recipients)
     {
         // Sort out the "to whom" list
         if ($this->debug) {
@@ -87,11 +87,12 @@ class Notifications
                     'lastName'    => 'Notifier',
                     'displayName' => 'Test Notifier',
                     'email'       => $this->debug_address,
-                ], ];
+                ],
+            ];
         } else {
             // Get the subscribers to the topic and it's forum
             //$subscriptions = new Subscriptions($this->app);
-            $this->recipients = [];//$subscriptions->getSubscribers($this->record->values['id']);
+            $this->recipients = $recipients;//$subscriptions->getSubscribers($this->record->values['id']);
         }
 
         // Get the email template
@@ -125,26 +126,15 @@ class Notifications
         /*
          * Author information
          */
-        /*
         if (! isset($this->record->values['authorprofile'])) {
             $this->record->values['authorprofile'] = $this->app['members']->getMember('id', $this->record->values['author']);
         }
-        */
 
         /*
          * Title and slug
-         * @TODO Replies are not guaranteed to be on page 1
          */
-        /*
-        if ($this->record->contenttype['slug'] == $this->config['contenttypes']['topics']) {
-            $title = $this->record->values['title'];
-            $uri = $this->config['base_uri'] . '/' . $forum['slug'] . '/' . $this->record->values['slug'];
-        } else {
-            $topic = $data->getTopic($this->record->values['topic']);
-            $title = $topic->values['title'];
-            $uri = $this->config['base_uri'] . '/' . $forum['slug'] . '/' . $topic->values['slug'];
-        }
-        */
+        $title = $this->record->values['title'];
+        //$uri = $this->config['base_uri'] . '/' . $forum['slug'] . '/' . $this->record->values['slug'];
 
         /*
          * Subject
