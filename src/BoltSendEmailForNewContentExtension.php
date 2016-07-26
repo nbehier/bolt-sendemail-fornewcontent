@@ -66,7 +66,7 @@ class BoltSendEmailForNewContentExtension extends SimpleExtension
 
             // Search subscribers
             try {
-                $aSubscribers = $this->getSubscribers();
+                $aSubscribers = $this->getSubscribers($contenttype);
 
                 // Send email foreach subscriber
                 // @todo
@@ -85,22 +85,46 @@ class BoltSendEmailForNewContentExtension extends SimpleExtension
      * @throws Exception
      * @return array records
      */
-    private function getSubscribers()
+    private function getSubscribers(String $contenttype)
     {
         $config       = $this->getConfig();
-        $entityName   = $config['subscribers']['contenttype'];
-        $fieldName    = $config['subscribers']['emailfield'];
-        $aSubscribers = false;
+        $subConfig    = $config['subscribers'];
+        $aSubscribers = false;        
+
+        // Check if specific config inside ContentType config
+        if ( ! empty($contenttype) && array_key_exists('subscribers', $config['notifications'][$contenttype]) ) {
+            $subConfig = $config['notifications'][$contenttype]['subscribers'];
+        }
+
+        $entityName   = $subConfig['contenttype'];
+        $fieldName    = $subConfig['emailfield'];
+        $filter       = array_key_exists('filter', $subConfig) ? $subConfig['filter'] : false;
 
         try {
             $meta = $app['storage.metadata']->getClassMetadata($entityName);//'Bolt\Storage\Entity\Users');
-            if (array_key_exists($fieldName, $meta['fields'])
+
+            // Check if config email field exists
+            if (   array_key_exists($fieldName, $meta['fields'])
                 && $meta['fields'][$fieldName]['type'] == 'string' ) {
+
                 $repo = $app['storage']->getRepository($entityName);
-                $aSubscribers = $app['storage']->fetchAll();
+
+                // Apply query filter if necessary
+                if ($filter) {
+                    $aSubscribers = $app['storage']->findBy([$filter['field'] => $filter['value']]);
+                }
+                else {
+                    $aSubscribers = $app['storage']->findAll();
+                }
             }
+
         } catch (\Exception $e) {
-            throw new \Exception(sprintf("No Subscribers table like %s with email field %s, as defined on config", $entityName, $fieldName), 1);
+            if ($filter) {
+                throw new \Exception(sprintf("No Subscribers table like %s with email field %s, filtered by %s = %s, as defined on config", $entityName, $fieldName, $filter['field'], $filter['value']), 1);
+            }
+            else {
+                throw new \Exception(sprintf("No Subscribers table like %s with email field %s, as defined on config", $entityName, $fieldName), 1);
+            }
         }
 
         return $aSubscribers;
@@ -116,7 +140,8 @@ class BoltSendEmailForNewContentExtension extends SimpleExtension
         $aContentTypes = array_keys($config['notifications']);
 
         foreach ($aContentTypes as $k => $sContentType) {
-            if (array_key_exists('enabled', $config['notifications'][$sContentType]) && $config['notifications'][$sContentType]['enabled'] == false) {
+            if (   array_key_exists('enabled', $config['notifications'][$sContentType])
+                && $config['notifications'][$sContentType]['enabled'] == false ) {
                 unset($aContentTypes[$k]);
             }
         }
