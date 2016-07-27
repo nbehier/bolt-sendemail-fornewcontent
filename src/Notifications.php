@@ -112,9 +112,6 @@ class Notifications
         // Set our Twig lookup path
         $this->addTwigPath();
 
-        //$data = new Data($this->app);
-        //$forum = $data->getForum($this->record['forum']);
-
         /*
          * From
          */
@@ -131,19 +128,10 @@ class Notifications
         }
 
         /*
-         * Title and slug
-         */
-        $title = $this->record->values['title'];
-        //$uri = $this->config['base_uri'] . '/' . $forum['slug'] . '/' . $this->record->values['slug'];
-
-        /*
          * Subject
          */
         $html = $this->app['render']->render($this->config['templates']['emailsubject'], [
-            'forum'       => '',//$forum['title'],
-            'contenttype' => '',//$this->record->contenttype['singular_name'],
-            'title'       => '',//$title,
-            'author'      => '',//$this->record->values['authorprofile']['displayname'],
+            'record'  => $this->record
         ]);
 
         $subject = new \Twig_Markup($html, 'UTF-8');
@@ -152,12 +140,8 @@ class Notifications
          * Body
          */
         $html = $this->app['render']->render($this->config['templates']['emailbody'], [
-            'forum'       => '',//$forum['title'],
-            'contenttype' => '',//$this->record->contenttype['singular_name'],
-            'title'       => '',//$title,
-            'author'      => '',//$this->record->values['authorprofile']['displayname'],
-            'uri'         => '',//$uri,
-            'body'        => '',//$this->record->values['body'],
+            'record'    => $this->record,
+            'recipient' => $recipient
         ]);
 
         $body = new \Twig_Markup($html, 'UTF-8');
