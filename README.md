@@ -3,7 +3,7 @@ Send email for new content - Bolt Extension
 
 [Bolt](https://bolt.cm/) extension to send email when new content is published
 
-### Known bugs
+### Known limitations
 - Notification email send each time you "depublish -> publish", beacause I do not track notification already sent.
 
 ### Requirements
