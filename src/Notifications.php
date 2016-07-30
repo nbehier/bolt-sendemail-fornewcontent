@@ -100,11 +100,9 @@ class Notifications
      */
     public function __construct(Silex\Application $app, array $config, Content $record)
     {
-        $this->app           = $app;
-        $this->config        = $config;
-        $this->debug         = $this->config['debug']['enabled'];
-        $this->debug_address = $this->config['debug']['address'];
-        $this->record        = $record;
+        $this->app    = $app;
+        $this->config = $config;
+        $this->record = $record;
 
         $this->setVars();
     }
@@ -201,6 +199,17 @@ class Notifications
     {
         // Set ContentType from record
         $this->contentType = $this->record->getContenttype();
+
+        // Set Debug
+        $this->debug         = $this->config['debug']['enabled'];
+        $this->debug_address = $this->config['debug']['address'];
+        if (   $this->debug
+            && ! empty($this->contentType)
+            && array_key_exists('debug', $this->config['notifications'][$this->contentType]) ) {
+            if ( $this->config['notifications'][$this->contentType]['debug'] == false ) {
+                $this->debug = false;
+            }
+        }
 
         // Set Email Field From Subscribers
         $this->emailField = $this->config['subscribers']['emailfield'];

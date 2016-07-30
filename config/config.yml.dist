@@ -19,7 +19,6 @@ email:
 notifications:
     entries:               # contenttype
 #         enabled: true
-#         event: new-pusblished
 #         subscribers:
 #             contenttype: subscribers
 #             emailfield: email
