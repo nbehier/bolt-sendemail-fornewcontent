@@ -30,39 +30,41 @@ class BoltSendEmailForNewContentExtension extends SimpleExtension
      */
     public function hookPreSave(StorageEvent $event)
     {
+        $app = $this->getContainer();
+
         // Get contenttype
         $contenttype                = $event->getContentType();
         $aNotificationsContentTypes = $this->getNotifContentTypes();
+
         if (   empty($contenttype)
             || empty($aNotificationsContentTypes)
             || !in_array($contenttype, $aNotificationsContentTypes) ) {
             return;
         }
 
-        // Get the record
+        // Get the record : Bolt\Storage\Entity\Content
         $record = $event->getContent();
 
         // Test if newly published
         $contentNewlyPublished = false;
         if (   $event->isCreate()
-            && array_key_exists('status', $record->values)
-            && $record->values['status'] == 'published') {
+            && $record->getStatus() == 'published') {
             $contentNewlyPublished = true;
         }
-        else if ($record->values['status'] == 'published') {
+        else if ($record->getStatus() == 'published') {
             // @todo : check if notification already sent
             // use a temporary file or a db table ?
             $repo = $app['storage']->getRepository($contenttype);
-            $oldRecord = $repo->find($record->id);
+            $oldRecord = $repo->find($record->getId() );
             if (   !empty($oldRecord)
-                && $oldRecord->values['status'] != 'published') {
+                && $oldRecord->getStatus() != 'published') {
                 $contentNewlyPublished = true;
             }
         }
 
         if ($contentNewlyPublished) {
             // Launch the notification
-            $notify = new Notifications($this->app, $record);
+            $notify = new Notifications($app, $this->getConfig(), $record);
 
             // Search subscribers
             try {
@@ -71,7 +73,7 @@ class BoltSendEmailForNewContentExtension extends SimpleExtension
                 // Send email foreach subscriber
                 $notify->doNotification($aSubscribers);
             } catch (\Exception $e) {
-                $this->app['logger.system']->error(sprintf("Notifications can't be sent - %s", $e->getMessage() ), ['event' => 'extensions']);
+                $app['logger.system']->error(sprintf("BoltSendEmailForNewContentExtension notifications can't be sent - %s", $e->getMessage() ), ['event' => 'extensions']);
                 return;
             }
         }
@@ -86,6 +88,7 @@ class BoltSendEmailForNewContentExtension extends SimpleExtension
      */
     private function getSubscribers($contenttype)
     {
+        $app          = $this->getContainer();
         $config       = $this->getConfig();
         $subConfig    = $config['subscribers'];
         $aSubscribers = false;
@@ -100,7 +103,7 @@ class BoltSendEmailForNewContentExtension extends SimpleExtension
         $filter       = array_key_exists('filter', $subConfig) ? $subConfig['filter'] : false;
 
         try {
-            $meta = $app['storage.metadata']->getClassMetadata($entityName);//'Bolt\Storage\Entity\Users');
+            $meta = $app['storage.metadata']->getClassMetadata($entityName);
 
             // Check if config email field exists
             if (   array_key_exists($fieldName, $meta['fields'])
@@ -110,10 +113,10 @@ class BoltSendEmailForNewContentExtension extends SimpleExtension
 
                 // Apply query filter if necessary
                 if ($filter) {
-                    $aSubscribers = $app['storage']->findBy([$filter['field'] => $filter['value']]);
+                    $aSubscribers = $repo->findBy([$filter['field'] => $filter['value']]);
                 }
                 else {
-                    $aSubscribers = $app['storage']->findAll();
+                    $aSubscribers = $repo->findAll();
                 }
             }
 
@@ -165,13 +168,7 @@ class BoltSendEmailForNewContentExtension extends SimpleExtension
     {
         return [
             'debug' => [
-                'enabled' => true,
-                'address' => 'noreply@example.com'
-            ],
-
-            'subscribers' => [
-                'contenttype' => 'subscribers',
-                'emailfield'  => 'email'
+                'enabled' => true
             ],
 
             'templates' => [
@@ -179,38 +176,9 @@ class BoltSendEmailForNewContentExtension extends SimpleExtension
                 'emailsubject' => 'email_subject.twig'
             ],
 
-            'email' => [
-                'subject'       => 'New entry published',
-                'from_name'     => '',
-                'from_email'    => '',
-                'replyto_name'  => '',
-                'replyto_email' => ''
-            ],
-
             'notifications' => [
                 'entries' => [
-                    'enabled'     => true,
-                    'event'       => 'new-pusblished',
-                    'subscribers' => [
-                        'contenttype' => 'subscribers',
-                        'emailfield'  => 'email',
-                        'filter'      => [
-                            'field' => 'newcontentsubscription',
-                            'value' => true
-                        ],
-                    ],
-                    'debug' =>   true,
-                    'email' => [
-                        'subject'       => 'New entry published',
-                        'from_name'     => '',
-                        'from_email'    => '',
-                        'replyto_name'  => '',
-                        'replyto_email' => ''
-                    ],
-                    'templates' => [
-                        'emailbody'    => 'email_body.twig',
-                        'emailsubject' => 'email_subject.twig'
-                    ],
+                    'enabled'     => true
                 ],
             ]
         ];

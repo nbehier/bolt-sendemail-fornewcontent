@@ -33,13 +33,12 @@ subscribers:
     emailfield: email        # email field name
 
 # templates:
-#     emailbody: extensions/bolt-sendemail_fornewcontent/email.twig
-#     emailsubject: extensions/bolt-sendemail_fornewcontent/_subject.twig
+#     emailbody: extensions/bolt-sendemail_fornewcontent/email_body.twig
+#     emailsubject: extensions/bolt-sendemail_fornewcontent/email_subject.twig
 
-# email:
-#     subject: New entry published
-#     from_name:      # Default : Site name
-#     from_email:     # 
+email:
+    from_name:  Your website
+    from_email: your-email@your-website.com
 #     replyto_name:   #
 #     replyto_email:  #
 
@@ -55,14 +54,13 @@ notifications:
 #                 value: true
 #         debug:   true
 #         email:
-#             subject: New entry published
 #             from_name:      # Default : Site name
-#             from_email:     # 
+#             from_email:     #
 #             replyto_name:   #
 #             replyto_email:  #
 #         templates:          # Over ride the global Twig templates for this form
-#             emailbody: extensions/bolt-sendemail_fornewcontent/email.twig
-#             emailsubject: extensions/bolt-sendemail_fornewcontent/_subject.twig
+#             emailbody: extensions/bolt-sendemail_fornewcontent/email_body.twig
+#             emailsubject: extensions/bolt-sendemail_fornewcontent/email_subject.twig
 ```
 
 ### Credits

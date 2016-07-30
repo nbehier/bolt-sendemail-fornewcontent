@@ -5,7 +5,7 @@
  #}
 <p>Hi {{ recipient.email }},</p>
 
-<p>A new {{ record.contenttype.singular_name }} has been published : <a href="{{ record.link }}">{{ record.title }}</a>.</p>
+<p>A new {{ record.contenttype.singular_name }} has been published : <a href="{{ app.paths.rooturl }}{{ record.link|slice(1) }}">{{ record.title }}</a>.</p>
 <hr>
 
 <em>Sent by the <a href="https://github.com/nbehier/bolt-sendemail-fornewcontent">BoltSendEmailForNewContent</a> extension for <a href="https://bolt.cm">Bolt</a>.</em>

@@ -10,10 +10,9 @@ subscribers:
 #     emailbody: extensions/bolt-sendemail_fornewcontent/email_body.twig
 #     emailsubject: extensions/bolt-sendemail_fornewcontent/email_subject.twig
 
-# email:
-#     subject: New content published
-#     from_name:      # Default : Site name
-#     from_email:     #
+email:
+    from_name:  Your website
+    from_email: your-email@your-website.com
 #     replyto_name:   #
 #     replyto_email:  #
 
@@ -29,7 +28,6 @@ notifications:
 #                 value: true
 #         debug:   true
 #         email:
-#             subject: New entry published
 #             from_name:      # Default : Site name
 #             from_email:     #
 #             replyto_name:   #
