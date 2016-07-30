@@ -88,7 +88,7 @@ class BoltSendEmailForNewContentExtension extends SimpleExtension
     {
         $config       = $this->getConfig();
         $subConfig    = $config['subscribers'];
-        $aSubscribers = false;        
+        $aSubscribers = false;
 
         // Check if specific config inside ContentType config
         if ( ! empty($contenttype) && array_key_exists('subscribers', $config['notifications'][$contenttype]) ) {
@@ -175,8 +175,8 @@ class BoltSendEmailForNewContentExtension extends SimpleExtension
             ],
 
             'templates' => [
-                'emailbody'    => '@BoltSendEmailForNewContent/email.twig',
-                'emailsubject' => '@BoltSendEmailForNewContent/_subject.twig'
+                'emailbody'    => 'email_body.twig',
+                'emailsubject' => 'email_subject.twig'
             ],
 
             'email' => [
@@ -208,8 +208,8 @@ class BoltSendEmailForNewContentExtension extends SimpleExtension
                         'replyto_email' => ''
                     ],
                     'templates' => [
-                        'emailbody'    => '@BoltSendEmailForNewContent/email.twig',
-                        'emailsubject' => '@BoltSendEmailForNewContent/_subject.twig'
+                        'emailbody'    => 'email_body.twig',
+                        'emailsubject' => 'email_subject.twig'
                     ],
                 ],
             ]
