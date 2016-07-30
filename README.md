@@ -21,7 +21,10 @@ Send email for new content - Bolt Extension
 ### Set up
 Email notifications will be sent, you should configure the `mailoptions` setting in your Bolt `app/config/config.yml`.
 
-**Note:** This extension uses the Swiftmailer library to send email notifications, based on the `mailoptions:` setting in your Bolt `app/config/config.yml` file.
+**Note:**
+- This extension uses the Swiftmailer library to send email notifications, based on the `mailoptions:` setting in your Bolt `app/config/config.yml` file.
+- When first installed, Extension defaults to turning debugging on in the configuration. This should be turned off when deployed in production. When debugging is on, all outbound emails are sent to the configured debug email address.
+- When you install Extension, you may have to create `app/config/extensions/boltsendemailfornewcontent.leskis.yml`.
 
 **Tip:** If you want to modify the HTML templates, you should copy the `.yml` file to your `theme/` folder, and modify it there. Any changes in the file in the distribution might be overwritten after an update to the extension. For instance, if you copy `email.twig` to `theme/base-2016/my_email.twig`, the corresponding line in `config.yml` should be: `emailbody: my_email.twig`
 
