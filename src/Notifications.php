@@ -183,12 +183,16 @@ class Notifications
     {
         // Set the recipient for *this* message
         $emailTo = $recipient->get($this->emailField);
-        $message->setTo($emailTo);
 
-        if ($this->app['mailer']->send($message)) {
-            $this->app['logger.system']->info("Sent BoltSendEmailForNewContentExtension notification to {$emailTo}", ['event' => 'extensions']);
-        } else {
-            $this->app['logger.system']->error("Failed BoltSendEmailForNewContentExtension notification to {$emailTo}", ['event' => 'extensions']);
+        try {
+            $message->setTo($emailTo);
+
+            // Queue the message in the mailer
+            $this->app['mailer']->send($message);
+
+	    $this->app['logger.system']->info("Sent BoltSendEmailForNewContentExtension notification to {$emailTo}", ['event' => 'extensions']);
+        } catch (\Exception $e) {
+            $this->app['logger.system']->error(sprintf("BoltSendMailForNewContentExtension failed for address {$emailTo} - %s", $e->getMessage() ), ['event' => 'extensions']);
         }
     }
 
