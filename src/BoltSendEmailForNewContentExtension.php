@@ -64,7 +64,7 @@ class BoltSendEmailForNewContentExtension extends SimpleExtension
 
         if ($contentNewlyPublished) {
             // Launch the notification
-            $notify = new Notifications($app, $this->getConfig(), $record);
+            $notify = new Notifications($app, $this->getConfig(), $record, $contenttype);
 
             // Search subscribers
             try {
@@ -174,6 +174,11 @@ class BoltSendEmailForNewContentExtension extends SimpleExtension
             'templates' => [
                 'emailbody'    => 'email_body.twig',
                 'emailsubject' => 'email_subject.twig'
+            ],
+
+            'email' => [
+                'replyto_name'  => NULL,
+                'replyto_email' => NULL
             ],
 
             'notifications' => [

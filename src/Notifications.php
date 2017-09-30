@@ -98,11 +98,12 @@ class Notifications
      * @param Silex\Application $app
      * @param \Bolt\Content     $record
      */
-    public function __construct(Silex\Application $app, array $config, Content $record)
+    public function __construct(Silex\Application $app, array $config, Content $record, $contenttype)
     {
         $this->app    = $app;
         $this->config = $config;
         $this->record = $record;
+	$this->contentType = $contenttype;
 
         $this->setVars();
     }
@@ -145,7 +146,7 @@ class Notifications
         $html = $this->app['render']->render($this->subjectTpl, [
             'record' => $this->record
         ]);
-        $subject = new \Twig_Markup($html, 'UTF-8');
+        $subject = new \Twig_Markup($html->getContent(), 'UTF-8');
 
         /*
          * Body
@@ -154,8 +155,7 @@ class Notifications
             'record'    => $this->record,
             'recipient' => $recipient
         ]);
-        $body = new \Twig_Markup($html, 'UTF-8');
-
+        $body = new \Twig_Markup($html->getContent(), 'UTF-8');
 
         /*
          * Build email
@@ -183,12 +183,16 @@ class Notifications
     {
         // Set the recipient for *this* message
         $emailTo = $recipient->get($this->emailField);
-        $message->setTo($emailTo);
 
-        if ($this->app['mailer']->send($message)) {
-            $this->app['logger.system']->info("Sent BoltSendEmailForNewContentExtension notification to {$emailTo}", ['event' => 'extensions']);
-        } else {
-            $this->app['logger.system']->error("Failed BoltSendEmailForNewContentExtension notification to {$emailTo}", ['event' => 'extensions']);
+        try {
+            $message->setTo($emailTo);
+
+            // Queue the message in the mailer
+            $this->app['mailer']->send($message);
+
+	    $this->app['logger.system']->info("Sent BoltSendEmailForNewContentExtension notification to {$emailTo}", ['event' => 'extensions']);
+        } catch (\Exception $e) {
+            $this->app['logger.system']->error(sprintf("BoltSendMailForNewContentExtension failed for address {$emailTo} - %s", $e->getMessage() ), ['event' => 'extensions']);
         }
     }
 
@@ -197,9 +201,6 @@ class Notifications
      */
     private function setVars()
     {
-        // Set ContentType from record
-        $this->contentType = $this->record->getContenttype();
-
         // Set Debug
         $this->debug         = $this->config['debug']['enabled'];
         $this->debug_address = $this->config['debug']['address'];
