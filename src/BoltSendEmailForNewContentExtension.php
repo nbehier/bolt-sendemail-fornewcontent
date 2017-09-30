@@ -176,6 +176,11 @@ class BoltSendEmailForNewContentExtension extends SimpleExtension
                 'emailsubject' => 'email_subject.twig'
             ],
 
+            'email' => [
+                'replyto_name'  => NULL,
+                'replyto_email' => NULL
+            ],
+
             'notifications' => [
                 'entries' => [
                     'enabled'     => true
