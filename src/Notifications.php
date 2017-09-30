@@ -146,7 +146,7 @@ class Notifications
         $html = $this->app['render']->render($this->subjectTpl, [
             'record' => $this->record
         ]);
-        $subject = new \Twig_Markup($html, 'UTF-8');
+        $subject = new \Twig_Markup($html->getContent(), 'UTF-8');
 
         /*
          * Body
@@ -155,8 +155,7 @@ class Notifications
             'record'    => $this->record,
             'recipient' => $recipient
         ]);
-        $body = new \Twig_Markup($html, 'UTF-8');
-
+        $body = new \Twig_Markup($html->getContent(), 'UTF-8');
 
         /*
          * Build email
