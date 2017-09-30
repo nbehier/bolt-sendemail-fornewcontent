@@ -98,11 +98,12 @@ class Notifications
      * @param Silex\Application $app
      * @param \Bolt\Content     $record
      */
-    public function __construct(Silex\Application $app, array $config, Content $record)
+    public function __construct(Silex\Application $app, array $config, Content $record, $contenttype)
     {
         $this->app    = $app;
         $this->config = $config;
         $this->record = $record;
+	$this->contentType = $contenttype;
 
         $this->setVars();
     }
@@ -197,9 +198,6 @@ class Notifications
      */
     private function setVars()
     {
-        // Set ContentType from record
-        $this->contentType = $this->record->getContenttype();
-
         // Set Debug
         $this->debug         = $this->config['debug']['enabled'];
         $this->debug_address = $this->config['debug']['address'];

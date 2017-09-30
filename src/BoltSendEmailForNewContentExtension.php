@@ -64,7 +64,7 @@ class BoltSendEmailForNewContentExtension extends SimpleExtension
 
         if ($contentNewlyPublished) {
             // Launch the notification
-            $notify = new Notifications($app, $this->getConfig(), $record);
+            $notify = new Notifications($app, $this->getConfig(), $record, $contenttype);
 
             // Search subscribers
             try {
